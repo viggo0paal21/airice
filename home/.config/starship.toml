@@ -1,0 +1,22 @@
+# Prompt wie ein klassisches Terminal: [viggo@archlinux ~]$
+# Doku: https://starship.rs/config/   Dein altes: starship.toml.bak-rice
+add_newline = false
+format = """[\\[](bold #ffffff)$username[@](bold #ffffff)$hostname $directory[\\]\\$](bold #ffffff) """
+
+[username]
+show_always = true
+style_user = "bold #ffffff"
+style_root = "bold #ffffff"
+format = "[$user]($style)"
+
+[hostname]
+ssh_only = false
+style = "bold #ffffff"
+format = "[$hostname]($style)"
+
+[directory]
+style = "bold #ffffff"
+read_only_style = "bold #ffffff"
+truncation_length = 1
+home_symbol = "~"
+format = "[$path]($style)[$read_only]($read_only_style)"

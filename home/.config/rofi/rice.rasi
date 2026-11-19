@@ -1,0 +1,93 @@
+/* rofi im Terminal-Look (App-Launcher Super + R, Power-Menue Super + Escape).
+ * Schwarz-Weiss, deckend, eckig, weisser Rahmen wie die Fenster, Auswahl invertiert.
+ * Dein altes Theme liegt weiter daneben: retro-oled.rasi (in config.rasi umstellen). */
+
+* {
+    bg:      #000000ff;
+    bg-alt:  #111111ff;
+    fg:      #ffffffff;
+    subtle:  #8a8a8aff;
+    muted:   #5a5a5aff;
+    accent:  #ffffffff;
+
+    background-color: transparent;
+    text-color:       @fg;
+    font:             "JetBrainsMono Nerd Font 12";
+}
+
+window {
+    transparency:     "real";
+    background-color: @bg;
+    border:           2px;
+    border-color:     @fg;
+    border-radius:    0px;
+    width:            560px;
+    padding:          14px;
+}
+
+mainbox {
+    spacing:  12px;
+    children: [ inputbar, listview ];
+}
+
+inputbar {
+    padding:      8px 10px;
+    border:       0px 0px 1px 0px;
+    border-color: @muted;
+    spacing:      10px;
+    children:     [ prompt, entry ];
+}
+
+prompt {
+    text-color: @accent;
+    font:       "JetBrainsMono Nerd Font Bold 12";
+}
+
+entry {
+    placeholder:       "search";
+    placeholder-color: @muted;
+    cursor:            text;
+}
+
+listview {
+    columns:   1;
+    lines:     8;
+    spacing:   2px;
+    scrollbar: false;
+}
+
+element {
+    padding:       6px 10px;
+    border-radius: 0px;
+    spacing:       10px;
+}
+
+element normal.normal,
+element alternate.normal {
+    text-color: @fg;
+}
+
+element selected.normal {
+    background-color: @fg;
+    text-color:       #000000ff;
+}
+
+element-text {
+    text-color:     inherit;
+    vertical-align: 0.5;
+}
+
+element-icon {
+    size:           20px;
+    vertical-align: 0.5;
+}
+
+message {
+    padding:      8px 10px;
+    border:       1px;
+    border-color: @muted;
+}
+
+textbox {
+    text-color: @fg;
+}

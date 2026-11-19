@@ -1,0 +1,13 @@
+configuration {
+    modi:                "drun";
+    show-icons:          true;
+    display-drun:        "❯";
+    drun-display-format: "{name}";
+    terminal:            "kitty";
+    scroll-method:       1;
+    hover-select:        false;
+    me-select-entry:     "";
+    me-accept-entry:     "MousePrimary";
+}
+/* Theme: rice.rasi (Terminal-Look). Dein altes: retro-oled.rasi */
+@theme "~/.config/rofi/rice.rasi"

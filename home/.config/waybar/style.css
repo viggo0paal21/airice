@@ -1,0 +1,125 @@
+/* NACHGEBAUT am 19.11.2026: Die echte Schwarz-Weiss-Version wurde geleert. Diese Datei ist die
+ * Rose-Pine-Version (rose-pine/style.css) mit den Farben aus ~/.config/rice/README.md. */
+
+/* Waybar im Terminal-Look: keine Kaesten, nur Text ueber dem Wallpaper.
+ * Palette (dieselbe in Hyprland, rofi, swaync, kitty, hyprlock):
+ *   fg     #ffffff  Text
+ *   subtle #8a8a8a  Namen wie "mem:", "Playing:"
+ *   muted  #5a5a5a  leere Workspaces, "muted"
+ *   accent #ffffff  Weiss (Unterstrich, "power")
+ * Die Namen "mem:", "cpu:", "audio:" stehen als <span color> in config.jsonc.
+ * Speichern reicht, Waybar laedt diese Datei sofort neu. */
+
+@define-color fg     #ffffff;
+@define-color subtle #8a8a8a;
+@define-color muted  #5a5a5a;
+@define-color accent #ffffff;
+/* Hintergrund der oberen Leiste: deckend schwarz (keine Transparenz) */
+@define-color bar_bg #000000;
+
+* {
+    font-family: "JetBrainsMono Nerd Font", monospace;
+    font-size: 13px;
+    font-weight: bold;
+    border: none;
+    border-radius: 0;
+    min-height: 0;
+}
+
+window#waybar {
+    background-color: @bar_bg;
+    color: @fg;
+}
+
+/* Untere Leiste: kleiner, ruhiger */
+window#waybar.bottom {
+    background-color: transparent;
+}
+
+window#waybar.bottom * {
+    font-size: 12px;
+    font-weight: normal;
+}
+
+tooltip {
+    background-color: #000000;
+    border: 1px solid @fg;
+}
+
+tooltip label {
+    color: @fg;
+}
+
+/* --- Workspaces (links) --- */
+#workspaces {
+    margin-left: 10px;
+}
+
+#workspaces button {
+    padding: 0 7px;
+    color: @fg;
+    background: transparent;
+    box-shadow: none;
+    text-shadow: none;
+    /* Unterstrich als Rahmen unten: blendet weich ein und aus statt zu springen */
+    border-bottom: 3px solid alpha(@accent, 0);
+    transition: border-color 200ms ease-out, color 200ms ease-out;
+}
+
+/* Leere Workspaces gedimmt */
+#workspaces button.empty {
+    color: @muted;
+}
+
+#workspaces button:hover {
+    background: transparent;
+    color: @subtle;
+}
+
+#workspaces button.active {
+    color: @fg;
+    border-bottom: 3px solid @accent;
+}
+
+#workspaces button.urgent {
+    color: @accent;
+}
+
+/* --- Uhr (Mitte) --- */
+#clock {
+    color: @fg;
+}
+
+/* --- Rechts --- */
+#memory,
+#cpu,
+#pulseaudio,
+#custom-power {
+    padding: 0 6px;
+    color: @fg;
+    transition: color 200ms ease-out;
+}
+
+#pulseaudio:hover {
+    color: @subtle;
+}
+
+#custom-power {
+    color: @accent;
+    margin-right: 10px;
+}
+
+#custom-power:hover {
+    color: @subtle;
+}
+
+/* --- Unten --- */
+#custom-playing {
+    color: @fg;
+    margin-left: 14px;
+}
+
+#custom-moon {
+    color: @fg;
+    margin-right: 14px;
+}

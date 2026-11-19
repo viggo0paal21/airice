@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Rice (neu) starten: Waybar, swaync und das Wallpaper. Laeuft beim Einloggen und mit Super + Shift + R.
+# Ausgaben der Programme landen in ~/.config/rice/logs (bei Problemen dort nachsehen).
+LOG="$HOME/.config/rice/logs"
+mkdir -p "$LOG"
+
+# Programm beenden und warten, bis es wirklich weg ist (hoechstens 3 s)
+stop() {
+  pkill -x "$1" 2>/dev/null || return 0
+  for _ in $(seq 30); do pgrep -x "$1" >/dev/null || return 0; sleep 0.1; done
+  pkill -9 -x "$1" 2>/dev/null
+}
+
+stop quickshell                       # alte Shell, falls sie noch laeuft
+
+stop waybar
+setsid -f waybar >"$LOG/waybar.log" 2>&1
+
+stop swaync
+setsid -f swaync >"$LOG/swaync.log" 2>&1
+
+# Wallpaper: Dienst starten (falls noch nicht da), dann das Bild aus waypaper setzen
+if ! pgrep -x awww-daemon >/dev/null; then
+  setsid -f awww-daemon >"$LOG/awww.log" 2>&1
+  sleep 0.5
+fi
+waypaper --restore >"$LOG/waypaper.log" 2>&1

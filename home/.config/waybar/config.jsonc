@@ -1,0 +1,97 @@
+// NACHGEBAUT am 19.11.2026: Die echte Schwarz-Weiss-Version wurde geleert. Diese Datei ist die
+// Rose-Pine-Version (rose-pine/config.jsonc) mit den Farben aus ~/.config/rice/README.md.
+// Waybar: zwei Leisten in einer Datei.
+//   1. oben: Workspaces | Uhr | mem, cpu, audio, power   (wie im Foto)
+//   2. unten: "Playing: ..." links, Mondphase rechts, liegt hinter den Fenstern wie ein Desktop-Widget
+// Farben und Schrift: style.css. Speichern reicht, Waybar laedt style.css von selbst neu;
+// nach Aenderungen an dieser Datei: pkill waybar; waybar &
+// Doku: https://github.com/Alexays/Waybar/wiki
+[
+    {
+        "name": "top",
+        "layer": "top",
+        "position": "top",
+        "height": 30,
+        "spacing": 0,
+        "reload_style_on_change": true,
+
+        "modules-left": ["hyprland/workspaces"],
+        "modules-center": ["clock"],
+        "modules-right": ["memory", "cpu", "pulseaudio", "custom/power"],
+
+        // Immer 1-5 zeigen (auch leere), weitere erscheinen, sobald sie benutzt werden
+        "hyprland/workspaces": {
+            "format": "{name}",
+            "persistent-workspaces": { "*": 5 },
+            "on-scroll-up": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e-1\" })'",
+            "on-scroll-down": "hyprctl dispatch 'hl.dsp.focus({ workspace = \"e+1\" })'"
+        },
+
+        "clock": {
+            "format": "{:%a %d %b %H:%M}",
+            "tooltip-format": "<tt><small>{calendar}</small></tt>",
+            "calendar": {
+                "mode": "month",
+                "format": {
+                    "today": "<span color='#ffffff'><b>{}</b></span>"
+                }
+            }
+        },
+
+        // <span color=...> = Farbe des Namens davor (grau), der Wert bleibt weiss
+        "memory": {
+            "interval": 5,
+            "format": "<span color='#8a8a8a'>mem:</span> {percentage}%",
+            "tooltip-format": "{used:0.1f} / {total:0.1f} GiB"
+        },
+
+        "cpu": {
+            "interval": 5,
+            "format": "<span color='#8a8a8a'>cpu:</span> {usage}%"
+        },
+
+        // Klick: Lautstaerke-Mixer, Rechtsklick: stumm, Mausrad: lauter/leiser
+        "pulseaudio": {
+            "format": "<span color='#8a8a8a'>audio:</span> {volume}%",
+            "format-muted": "<span color='#8a8a8a'>audio:</span> <span color='#5a5a5a'>muted</span>",
+            "scroll-step": 5,
+            "on-click": "pavucontrol",
+            "on-click-right": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
+            "tooltip-format": "{desc}"
+        },
+
+        "custom/power": {
+            "format": "power",
+            "tooltip": false,
+            "on-click": "~/.local/bin/rice-power"
+        }
+    },
+    {
+        "name": "bottom",
+        "layer": "bottom",
+        "position": "bottom",
+        "height": 26,
+        "exclusive": false,
+        "passthrough": true,
+        "reload_style_on_change": true,
+
+        "modules-left": ["custom/playing"],
+        "modules-right": ["custom/moon"],
+
+        // Was gerade laeuft (Spotify, Firefox, mpv ...), live ueber playerctl
+        "custom/playing": {
+            "format": "<span color='#8a8a8a'>Playing:</span> {}",
+            "exec": "~/.config/waybar/scripts/playing.sh",
+            "return-type": "json",
+            "escape": true
+        },
+
+        // Mondphase, einmal pro Stunde neu berechnet (ohne Internet)
+        "custom/moon": {
+            "format": "<span color='#8a8a8a'>Current phase:</span> {}",
+            "exec": "~/.config/waybar/scripts/moon.sh",
+            "return-type": "json",
+            "interval": 3600
+        }
+    }
+]

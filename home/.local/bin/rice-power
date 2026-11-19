@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# Power-Menue (Super + Escape, oder "power" in der Leiste): kleine rofi-Liste im Terminal-Look.
+# Eintraege aendern: die Liste unten und den case-Block.
+pkill -x rofi && exit 0
+
+choice=$(printf '%s\n' "lock" "logout" "suspend" "reboot" "shutdown" |
+  rofi -dmenu -i -p "power" -no-show-icons \
+       -theme-str 'window { width: 260px; } listview { lines: 5; } entry { placeholder: ""; }')
+
+case "$choice" in
+  lock)     pidof hyprlock || hyprlock ;;
+  logout)   command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()' ;;
+  suspend)  systemctl suspend ;;
+  reboot)   systemctl reboot ;;
+  shutdown) systemctl poweroff ;;
+esac

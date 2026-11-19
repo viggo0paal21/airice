@@ -1,0 +1,73 @@
+#!/usr/bin/env python3
+# rice-wall: macht aus einem Bild ein Wallpaper im Rice-Look
+# (dunkler grauer Verlauf, das Motiv als helle Linien, wie auf einem alten Monochrom-Monitor).
+#
+#   rice-wall BILD                 -> ~/Wallpapers/<name>-rice.png
+#   rice-wall BILD ZIEL.png
+#   Optionen: --color "#d8d8d8"  Farbe des Motivs
+#             --size 2560x1440   Bildschirmgroesse
+#             --lines 3          Abstand der Linien in Pixeln (0 = keine Linien)
+#             --invert           helles Bild mit dunklem Motiv (Motiv ist dunkel statt hell)
+#             --fit              ganzes Bild zeigen statt den Bildschirm zu fuellen
+#
+# Am besten mit Bildern, die einen dunklen Hintergrund und ein helles Motiv haben
+# (ASCII-Art, Schwarz-Weiss-Zeichnungen). Braucht python-pillow.
+import argparse, os, sys
+from PIL import Image, ImageChops, ImageFilter, ImageOps
+
+p = argparse.ArgumentParser(description="Wallpaper im Rice-Look erzeugen")
+p.add_argument("src")
+p.add_argument("out", nargs="?")
+p.add_argument("--color", default="#d8d8d8")
+p.add_argument("--size", default="2560x1440")
+p.add_argument("--lines", type=int, default=3)
+p.add_argument("--invert", action="store_true")
+p.add_argument("--fit", action="store_true")
+a = p.parse_args()
+
+W, H = (int(v) for v in a.size.lower().split("x"))
+acc = tuple(int(a.color.lstrip("#")[i:i + 2], 16) for i in (0, 2, 4))
+out = a.out or os.path.join(os.path.expanduser("~/Wallpapers"),
+                            os.path.splitext(os.path.basename(a.src))[0] + "-rice.png")
+os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
+Image.MAX_IMAGE_PIXELS = None
+
+# 1. Hintergrund: dunkler Verlauf, in der Mitte etwas heller (grau-blau), aussen fast schwarz
+small = Image.new("L", (64, 36))
+for y in range(36):
+    for x in range(64):
+        dx, dy = (x - 28) / 40, (y - 15) / 26
+        small.putpixel((x, y), max(0, min(255, int(255 * (1 - (dx * dx + dy * dy) ** 0.5)))))
+glow = small.resize((W, H), Image.BICUBIC).filter(ImageFilter.GaussianBlur(40))
+dark, light = Image.new("RGB", (W, H), (6, 6, 6)), Image.new("RGB", (W, H), (34, 34, 34))
+bg = Image.composite(light, dark, glow)
+
+# 2. Motiv als Helligkeit (hell = wird gezeichnet)
+src = ImageOps.exif_transpose(Image.open(a.src)).convert("L")
+if a.invert:
+    src = ImageOps.invert(src)
+src = ImageOps.autocontrast(src, cutoff=1)
+if a.fit:
+    src = ImageOps.contain(src, (W, H), Image.LANCZOS)
+    mask = Image.new("L", (W, H), 0)
+    mask.paste(src, ((W - src.width) // 2, (H - src.height) // 2))
+else:
+    mask = ImageOps.fit(src, (W, H), Image.LANCZOS)
+
+# 3. Linien: jede n-te Zeile fast leer, wie Zeilen auf einem Roehrenmonitor
+if a.lines > 1:
+    rows = Image.new("L", (1, a.lines), 255)
+    rows.putpixel((0, a.lines - 1), 50)
+    pattern = rows.resize((W, a.lines), Image.NEAREST)
+    full = Image.new("L", (W, H))
+    for y in range(0, H, a.lines):
+        full.paste(pattern, (0, y))
+    mask = ImageChops.multiply(mask, full)
+
+# 4. Motiv in der Akzentfarbe ueber den Hintergrund, dazu ein leichtes Leuchten
+color = Image.new("RGB", (W, H), acc)
+glowmask = mask.filter(ImageFilter.GaussianBlur(6)).point(lambda v: v * 0.35)
+img = Image.composite(color, bg, glowmask)
+img = Image.composite(color, img, mask.point(lambda v: v * 0.85))
+img.save(out)
+print(out)

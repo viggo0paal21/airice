@@ -1,0 +1,7 @@
+#!/bin/sh
+# Start-Shell fuer kitty (kitty.conf: shell ~/.local/bin/rice-shell/zsh):
+# zeigt das kurze fastfetch (~/.config/fastfetch/rice.jsonc), dann die normale zsh.
+# Die Datei heisst absichtlich "zsh": kitty erkennt die Shell am Namen und richtet nur dann
+# seine Shell-Integration ein. Kein fastfetch beim Start: die Zeile mit fastfetch loeschen.
+command -v fastfetch >/dev/null 2>&1 && fastfetch -c rice
+exec /usr/bin/zsh "$@"

@@ -1,0 +1,122 @@
+/* Waybar im Terminal-Look: keine Kaesten, nur Text ueber dem Wallpaper.
+ * Palette (dieselbe in Hyprland, rofi, swaync, kitty, hyprlock):
+ *   fg     #e0def4  heller Text
+ *   subtle #908caa  Beschriftungen unten
+ *   muted  #6e6a86  leere Workspaces, "muted"
+ *   accent #eb6f92  Pink (Unterstrich, "power", Namen wie "mem:")
+ * Die Namen "mem:", "cpu:", "audio:" stehen als <span color> in config.jsonc.
+ * Speichern reicht, Waybar laedt diese Datei sofort neu. */
+
+@define-color fg     #e0def4;
+@define-color subtle #908caa;
+@define-color muted  #6e6a86;
+@define-color accent #eb6f92;
+/* Hintergrund der oberen Leiste: transparent wie im Foto. Fuer Schwarz: rgba(0, 0, 0, 1) */
+@define-color bar_bg rgba(0, 0, 0, 0);
+
+* {
+    font-family: "JetBrainsMono Nerd Font", monospace;
+    font-size: 13px;
+    font-weight: bold;
+    border: none;
+    border-radius: 0;
+    min-height: 0;
+}
+
+window#waybar {
+    background-color: @bar_bg;
+    color: @fg;
+}
+
+/* Untere Leiste: kleiner, ruhiger */
+window#waybar.bottom {
+    background-color: transparent;
+}
+
+window#waybar.bottom * {
+    font-size: 12px;
+    font-weight: normal;
+}
+
+tooltip {
+    background-color: #000000;
+    border: 1px solid @fg;
+}
+
+tooltip label {
+    color: @fg;
+}
+
+/* --- Workspaces (links) --- */
+#workspaces {
+    margin-left: 10px;
+}
+
+#workspaces button {
+    padding: 0 7px;
+    color: @fg;
+    background: transparent;
+    box-shadow: none;
+    text-shadow: none;
+    /* Unterstrich als Rahmen unten: blendet weich ein und aus statt zu springen */
+    border-bottom: 3px solid alpha(@accent, 0);
+    transition: border-color 200ms ease-out, color 200ms ease-out;
+}
+
+/* Leere Workspaces gedimmt */
+#workspaces button.empty {
+    color: @muted;
+}
+
+#workspaces button:hover {
+    background: transparent;
+    color: @accent;
+}
+
+#workspaces button.active {
+    color: @fg;
+    border-bottom: 3px solid @accent;
+}
+
+#workspaces button.urgent {
+    color: @accent;
+}
+
+/* --- Uhr (Mitte) --- */
+#clock {
+    color: @fg;
+}
+
+/* --- Rechts --- */
+#memory,
+#cpu,
+#pulseaudio,
+#custom-power {
+    padding: 0 6px;
+    color: @fg;
+    transition: color 200ms ease-out;
+}
+
+#pulseaudio:hover {
+    color: @accent;
+}
+
+#custom-power {
+    color: @accent;
+    margin-right: 10px;
+}
+
+#custom-power:hover {
+    color: @fg;
+}
+
+/* --- Unten --- */
+#custom-playing {
+    color: @fg;
+    margin-left: 14px;
+}
+
+#custom-moon {
+    color: @fg;
+    margin-right: 14px;
+}

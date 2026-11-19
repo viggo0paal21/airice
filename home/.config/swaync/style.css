@@ -1,0 +1,115 @@
+/* swaync (Benachrichtigungen, Super + N = Liste) im Terminal-Look:
+ * schwarze Kaesten, eckig, weisser Rahmen wie die Fenster, Schwarz-Weiss.
+ * Neu laden ohne Ausloggen: swaync-client -rs */
+
+@define-color bg     #000000;
+@define-color bg_alt #111111;
+@define-color fg     #ffffff;
+@define-color subtle #b0b0b0;
+@define-color muted  #5a5a5a;
+@define-color accent #ffffff;
+
+* {
+  font-family: "JetBrainsMono Nerd Font", monospace;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 0;
+  box-shadow: none;
+  text-shadow: none;
+}
+
+/* --- Popups --- */
+.notification-row {
+  outline: none;
+}
+
+.notification-row .notification-background {
+  margin: 6px 8px;
+}
+
+.notification {
+  background: @bg;
+  color: @fg;
+  border: 2px solid @fg;
+  padding: 0;
+}
+
+.notification-content {
+  background: transparent;
+  padding: 10px 12px;
+}
+
+.summary { color: @fg; }
+.body    { color: @subtle; font-weight: 400; }
+.time    { color: @muted; font-size: 11px; }
+
+.low .notification      { border-color: @muted; }
+.critical .notification { border-color: @accent; }
+.critical .summary      { color: @accent; }
+
+/* Schliessen- und Aktionsknoepfe: Text in eckigen Klammern-Optik */
+.close-button {
+  background: @bg;
+  color: @muted;
+  margin: 6px;
+  padding: 0 4px;
+  border: none;
+}
+.close-button:hover { color: @accent; }
+
+.notification-action {
+  background: @bg;
+  color: @fg;
+  border: 1px solid @muted;
+  margin: 4px;
+}
+.notification-action:hover {
+  background: @fg;
+  color: @bg;
+}
+
+/* --- Liste (Super + N) --- */
+.control-center {
+  background: @bg;
+  color: @fg;
+  border: 2px solid @fg;
+  padding: 6px;
+}
+
+.control-center .notification-row .notification-background {
+  margin: 4px;
+}
+
+.widget-title {
+  margin: 4px;
+  padding: 4px 8px;
+  color: @accent;
+}
+
+.widget-title > button {
+  background: @bg;
+  color: @fg;
+  border: 1px solid @muted;
+  padding: 0 10px;
+}
+.widget-title > button:hover {
+  background: @fg;
+  color: @bg;
+}
+
+.widget-dnd {
+  margin: 4px;
+  padding: 4px 8px;
+  color: @fg;
+}
+.widget-dnd > switch {
+  background: @bg_alt;
+  border: 1px solid @muted;
+}
+.widget-dnd > switch:checked { background: @accent; }
+.widget-dnd > switch slider { background: @fg; }
+
+.widget-inhibitors {
+  margin: 4px;
+  padding: 4px 8px;
+}

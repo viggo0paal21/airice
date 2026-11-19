@@ -1,0 +1,58 @@
+/* GTK4 / libadwaita (Nautilus, Einstellungen, Datei-Dialoge ...) im Rice-Look:
+ * Schwarz-Weiss, deckend (keine Transparenz), eckig.
+ * Wirkt beim naechsten Start der App (Nautilus ganz beenden: nautilus -q). Alte Version: gtk.css.bak-rice */
+
+/* Flaechen: alles deckend schwarz, Karten/Seitenleiste minimal heller */
+@define-color window_bg_color             #000000;
+@define-color view_bg_color               #000000;
+@define-color headerbar_bg_color          #000000;
+@define-color headerbar_backdrop_color    #000000;
+@define-color sidebar_bg_color            #000000;
+@define-color sidebar_backdrop_color      #000000;
+@define-color secondary_sidebar_bg_color  #000000;
+@define-color card_bg_color               #0d0d0d;
+@define-color dialog_bg_color             #000000;
+@define-color popover_bg_color            #000000;
+@define-color thumbnail_bg_color          #0d0d0d;
+
+/* Schrift */
+@define-color window_fg_color             #ffffff;
+@define-color view_fg_color               #ffffff;
+@define-color headerbar_fg_color          #ffffff;
+@define-color sidebar_fg_color            #ffffff;
+@define-color card_fg_color               #ffffff;
+@define-color dialog_fg_color             #ffffff;
+@define-color popover_fg_color            #ffffff;
+
+/* Akzent (Auswahl, Schalter, Knoepfe): Weiss mit schwarzer Schrift */
+@define-color accent_bg_color             #ffffff;
+@define-color accent_fg_color             #000000;
+@define-color accent_color                #ffffff;
+
+/* Linien */
+@define-color headerbar_border_color      #333333;
+@define-color borders                     #333333;
+
+/* Eckig wie die Fenster in Hyprland */
+window, window.csd, window.background, dialog, .dialog, popover > contents, popover > arrow,
+button, entry, spinbutton, dropdown > button, combobox, .card, list, listview, row,
+.navigation-sidebar > row, .navigation-sidebar row, toast, .osd, menu, menubutton > button,
+searchbar > revealer > box, headerbar, .toolbar, actionbar, scrollbar slider, progressbar trough,
+progressbar progress, switch, switch > slider, check, tooltip, tooltip > box {
+  border-radius: 0;
+}
+
+/* Fensterrahmen macht Hyprland: kein eigener Schatten / Rand der App */
+window.csd {
+  box-shadow: none;
+  outline: none;
+}
+
+/* Feine Linie unter der Kopfleiste statt Schatten */
+headerbar {
+  box-shadow: inset 0 -1px #333333;
+}
+
+separator {
+  background-color: #333333;
+}
