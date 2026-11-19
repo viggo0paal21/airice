@@ -23,6 +23,7 @@ Alles liegt unter `home/` genau so, wie es in meinem Home-Ordner (`~`) liegt.
 | Terminal | `.config/kitty/kitty.conf`, `.local/bin/rice-shell/zsh` (fastfetch beim Start) |
 | Shell und Prompt | `.zshrc`, `.config/starship.toml` |
 | Kurzes fastfetch | `.config/fastfetch/rice.jsonc` (`fastfetch -c rice`) |
+| Grosses fastfetch mit ASCII-/Bild-Logos | `.config/fastfetch/config.jsonc`, `*.txt`, `*.png` |
 | GTK-Apps (Nautilus usw.) | `.config/gtk-3.0/`, `.config/gtk-4.0/`, `.gtkrc-2.0`, `.config/xsettingsd/`, Theme `.themes/Back-In-Black/` |
 | Qt-Apps | `.config/qt6ct/`, `.config/Kvantum/` (Theme `MonochromeSolid`) |
 | Schrift | `.config/fontconfig/` (JetBrainsMono Nerd Font als Systemschrift) |
